@@ -22,16 +22,23 @@ This project was developed as part of the Child Mind Institute's Kaggle competit
 
 ---
 
-## 🗂️ Repository Structure
+## 🛠️ What Was Done
 
-```plaintext
-├── train.csv                  # Training dataset
-├── test.csv                   # Test dataset
-├── data_dictionary.csv        # Data dictionary
-├── Child Mind Institute.ipynb # Jupyter notebook containing the analysis
-├── sample_submission.csv      # Sample format for Kaggle submission
-├── README.md                  # Project documentation
-```
+### Models Used
+- **Random Forest Classifier (Model 1):** A baseline model trained only on non-missing values.
+- **XGBoost Classifier (Model 2):** Handled missing values by treating them as a separate class.
+- **LightGBM Classifier (Model 3):** Enhanced the dataset by imputing missing values with predictions from Model 1.
+
+### Data Splitting
+- Training data was split using a **5-fold cross-validation** strategy to ensure robustness.
+
+### Feature Engineering
+- Normalized features such as BMI, total internet usage, and depression scores.
+- Added a binary indicator variable for missing data to capture dependencies.
+
+### Handling Missing Data
+- Imputed missing values in the ‘sii’ column using predictions from the baseline Random Forest model.
+- Treated missing values as a distinct class for comparison.
 
 ---
 
@@ -64,25 +71,16 @@ This project was developed as part of the Child Mind Institute's Kaggle competit
 
 ---
 
-## 🛠️ What Was Done
+## 🗂️ Repository Structure
 
-### Models Used
-- **Random Forest Classifier (Model 1):** A baseline model trained only on non-missing values.
-- **XGBoost Classifier (Model 2):** Handled missing values by treating them as a separate class.
-- **LightGBM Classifier (Model 3):** Enhanced the dataset by imputing missing values with predictions from Model 1.
-
-### Data Splitting
-- Training data was split using a **5-fold cross-validation** strategy to ensure robustness.
-
-### Feature Engineering
-- Normalized features such as BMI, total internet usage, and depression scores.
-- Added a binary indicator variable for missing data to capture dependencies.
-
-### Handling Missing Data
-- Imputed missing values in the ‘sii’ column using predictions from the baseline Random Forest model.
-- Treated missing values as a distinct class for comparison.
-
----
+```plaintext
+├── train.csv                  # Training dataset
+├── test.csv                   # Test dataset
+├── data_dictionary.csv        # Data dictionary
+├── Child Mind Institute.ipynb # Jupyter notebook containing the analysis
+├── sample_submission.csv      # Sample format for Kaggle submission
+├── README.md                  # Project documentation
+```
 
 ## 🚀 How to Run
 
