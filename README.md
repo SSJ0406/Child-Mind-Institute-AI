@@ -1,7 +1,34 @@
 # 🌐 Child Mind Institute Problematic Internet Use Challenge
 
 ## 📋 Overview
-This project was developed as part of the Child Mind Institute's Kaggle competition to predict and analyze problematic internet use (PIU) in children and adolescents. The goal was to create a robust machine learning pipeline to handle missing data and identify key factors contributing to severe internet involvement.
+This project was developed as part of the Child Mind Institute's Kaggle competition to predict and analyze problematic internet use (PIU) in children and adolescents. The goal was to create a robust machine learning pipeline to handle missing data and identify key factors contributing to severe internet involvement. The project involved:
+
+- 🔍 **Data Exploration**: Unearthing patterns, tackling missing values, and uncovering correlations.
+- 🛠️ **Feature Engineering**: Crafting normalized features and transforming categorical data.
+- 🤖 **Model Training**: Testing three creative strategies for handling `sii` column gaps.
+- 🎨 **Visualization**: Illuminating insights with striking plots and heatmaps.
+- 🚀 **Submission**: Delivering predictions ready for Kaggle glory!
+
+## 🎯 Key Results
+
+- **Model 1:**
+  - **Accuracy:** 59.43%
+  - **First 10 Predictions:** [2, 0, 0, 1, 2, 1, 0, 0, 0, 2]
+- **Model 2:**
+  - **Accuracy:** 68.99%
+  - **First 10 Predictions:** [2, 0, 0, 1, 4, 1, 0, 4, 4, 4]
+- **Model 3:**
+  - **Accuracy:** 71.11%
+  - **First 10 Predictions:** [2, 0, 0, 1, 2, 1, 0, 0, 0, 2]
+
+## Technologies Used
+
+- **Python**
+- **Libraries**:
+  - Data Wrangling: Pandas, NumPy
+  - Machine Learning: Scikit-learn, XGBoost, LightGBM
+  - Visuals That Pop: Matplotlib, Seaborn
+- **Workflow**: Streamlined with Pipelines and Cross-validation
 
 ---
 
@@ -24,21 +51,76 @@ This project was developed as part of the Child Mind Institute's Kaggle competit
 
 ## 🛠️ What Was Done
 
-### Models Used
-- **Random Forest Classifier (Model 1):** A baseline model trained only on non-missing values.
-- **XGBoost Classifier (Model 2):** Handled missing values by treating them as a separate class.
-- **LightGBM Classifier (Model 3):** Enhanced the dataset by imputing missing values with predictions from Model 1.
+### Data Exploration
+- **Previewed Dataset:**
+  - Inspected data types, missing values, and the first few rows.
 
-### Data Splitting
-- Training data was split using a **5-fold cross-validation** strategy to ensure robustness.
+  ```python
+  print(train_data.info())
+  print(train_data.head())
+  ```
+
+- **Analyzed Missing Values:**
+  - Added a binary column `sii_missing` to indicate missing values.
+
+  ```python
+  train_data['sii_missing'] = train_data['sii'].isnull().astype(int)
+  ```
 
 ### Feature Engineering
-- Normalized features such as BMI, total internet usage, and depression scores.
-- Added a binary indicator variable for missing data to capture dependencies.
+- **Normalized Numerical Features:**
+  - Created new features like `BMI_norm` and `SDS_Total_norm`.
 
-### Handling Missing Data
-- Imputed missing values in the ‘sii’ column using predictions from the baseline Random Forest model.
-- Treated missing values as a distinct class for comparison.
+  ```python
+  train_data['BMI_norm'] = train_data['Physical-BMI'] / train_data['Physical-BMI'].max()
+  ```
+
+- **One-Hot Encoding for Categorical Features:**
+  - Applied encoding to variables like `Basic_Demos-Sex`.
+
+  ```python
+  preprocessor = ColumnTransformer([
+      ('num', StandardScaler(), numeric_features),
+      ('cat', OneHotEncoder(drop='first'), categorical_features)
+  ])
+  ```
+
+### Model Training
+- **Model 1:**
+  - Trained on data with missing `sii` values excluded.
+
+  ```python
+  pipeline_model1 = Pipeline([
+      ('preprocessor', preprocessor),
+      ('classifier', RandomForestClassifier(random_state=42))
+  ])
+  pipeline_model1.fit(X_model1, y_model1)
+  ```
+
+- **Model 2:**
+  - Treated missing values in `sii` as a separate class.
+
+  ```python
+  train_data['sii'] = train_data['sii'].fillna(4).astype(int)
+  pipeline_model2.fit(X_model2, y_model2)
+  ```
+
+- **Model 3:**
+  - Imputed missing `sii` values using Model 1's predictions.
+
+  ```python
+  train_data.loc[train_data['sii'] == 4, 'sii'] = pipeline_model1.predict(
+      train_data.loc[train_data['sii'] == 4, features]
+  )
+  pipeline_model3.fit(X_model3, y_model3)
+  ```
+
+- **Cross-Validation:**
+  - Used Stratified K-Fold Cross-Validation for robust evaluation.
+
+  ```python
+  cv_scores = cross_val_score(pipeline_model1, X_model1, y_model1, cv=5, scoring='accuracy')
+  ```
 
 ---
 
