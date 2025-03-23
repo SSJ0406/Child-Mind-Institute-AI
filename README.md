@@ -26,16 +26,14 @@ Additionally, **PySpark** was used for processing large-scale parquet files effi
 ## 🎯 Key Results
 
 - **Model 1:**
-  - **Accuracy:** 59.43%
-  - **ROC-AUC:** 0.71
+  - **Accuracy:** 59.10%
 
 - **Model 2:**
-  - **Accuracy:** 68.99%
-  - **ROC-AUC:** 0.75
-
+  - **Accuracy:** 68.86%
+ 
 - **Model 3:**
-  - **Accuracy:** 71.11%
-  - **ROC-AUC:** 0.78
+  - **Accuracy:** 70.71%
+  
 
 ---
 
